@@ -11,8 +11,8 @@ import java.net.UnknownHostException;
  * 1. InetAddress: Utilizado para obter o IP a partir de um nome de host (Hostname).
  * 2. InetSocketAddress: Utilizado para representar um par Endereço IP + Número de Porta,
  * essencial para a criação de Sockets TCP/UDP.
- * * @author Prof. Junio (IFG - IFMaker)
- * @since  2025-05-22
+ * * @author Prof. Junio Lima
+ * @since  2025-03-18
  * @version 1.0
  */
 public class ExemploInetAddress {
