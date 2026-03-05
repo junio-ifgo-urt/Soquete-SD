@@ -6,10 +6,25 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * RESUMO: Servidor TCP Multithread robusto com Pool de Threads (ExecutorService).
+ * FUNCIONAMENTO: Utiliza uma arquitetura de Thread Pool para limitar o uso de recursos
+ * e suporta conexões persistentes, permitindo múltiplas requisições por conexão.
+ * * CONCEITOS COULOURIS: Escalabilidade (ThreadPool) e Persistência de conexão.
+ * 
+ * Executar o servidor via de comando para analisar o comportamento do ThreadPool e as chamadas dos clientes
+ *  javac TCPServidorRelogioMultiThread.java
+ *  java TCPServidorRelogioMultiThread
+
+ * @author Prof. Junio Lima
+ * @since  2025-05-22
+ * @version 2.0 (Stable)
+ */
 public class TCPServidorRelogioMultiThread {
     private static final int PORTA = 9876;
     private static final int MAX_THREADS = 10; // Limita o número de threads ativas
@@ -47,6 +62,12 @@ public class TCPServidorRelogioMultiThread {
 
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8));
                  BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8))) {
+
+                // Durante os testes, observou-se que as respostas do servidor não seguem necessariamente a ordem 
+                // de chegada das requisições (FIFO). Isso ocorre devido ao escalonamento não 
+                // determinístico de Threads pelo Sistema Operacional, demonstrando o paralelismo real da aplicação
+                System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss.SSS")) + 
+                "] Atendendo Cliente: " + clientSocket.getInetAddress());
 
                 String clientMessage;
                 while ((clientMessage = reader.readLine()) != null) { // Mantém a conexão aberta
